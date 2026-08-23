@@ -1,5 +1,24 @@
 -- VMaaS Dashboard — schema, security policies, and aggregate functions.
--- Paste into Supabase → SQL Editor → Run. Safe to run on an empty project.
+-- Paste into Supabase → SQL Editor → Run.
+
+-- ---------------------------------------------------------------------------
+-- Clean slate
+--
+-- Makes the script re-runnable, so a failed run part-way through doesn't have
+-- to be untangled by hand. DESTRUCTIVE: this deletes the tables and everything
+-- in them. Fine while the database holds nothing but seed data. Once there is
+-- real data, delete this block and write migrations instead.
+-- ---------------------------------------------------------------------------
+
+drop function if exists public.my_workspace(), public.is_admin(),
+  public.quota_usage(), public.storage_usage(), public.monthly_spend() cascade;
+
+drop table if exists public.audit_log, public.catalog_assets, public.nat_rules,
+  public.firewall_rules, public.snapshots, public.provisions, public.subnets,
+  public.app_groups, public.users, public.workspace_settings, public.workspaces cascade;
+
+drop type if exists public.user_role, public.vm_status, public.storage_tier,
+  public.commitment_tier, public.subnet_kind, public.asset_kind cascade;
 
 -- ---------------------------------------------------------------------------
 -- Types
@@ -297,20 +316,21 @@ language sql stable security definer set search_path = '' as $$
 $$;
 
 -- Admin only: returns nothing for a standard user.
+-- Every type is schema-qualified because search_path is '' — an unqualified
+-- `storage_tier` is unresolvable inside this function.
 create or replace function public.storage_usage()
-returns table (tier storage_tier, capacity_gb bigint, used_gb bigint)
+returns table (tier public.storage_tier, capacity_gb bigint, used_gb bigint)
 language sql stable security definer set search_path = '' as $$
-  select t.tier, t.capacity_gb, coalesce(sum(p.storage_gb), 0)
-  from (
-    select 'ssd_high_perf'::storage_tier, s.ssd_capacity_gb      from public.workspace_settings s where s.workspace_id = public.my_workspace()
-    union all
-    select 'standard'::storage_tier,      s.standard_capacity_gb from public.workspace_settings s where s.workspace_id = public.my_workspace()
-    union all
-    select 'archive'::storage_tier,       s.archive_capacity_gb  from public.workspace_settings s where s.workspace_id = public.my_workspace()
+  select t.tier, t.capacity_gb, coalesce(sum(p.storage_gb), 0)::bigint
+  from public.workspace_settings s
+  cross join lateral (values
+    ('ssd_high_perf'::public.storage_tier, s.ssd_capacity_gb),
+    ('standard'::public.storage_tier,      s.standard_capacity_gb),
+    ('archive'::public.storage_tier,       s.archive_capacity_gb)
   ) as t(tier, capacity_gb)
   left join public.provisions p
-    on p.workspace_id = public.my_workspace() and p.storage_tier = t.tier
-  where public.is_admin()
+    on p.workspace_id = s.workspace_id and p.storage_tier = t.tier
+  where s.workspace_id = public.my_workspace() and public.is_admin()
   group by t.tier, t.capacity_gb
 $$;
 
