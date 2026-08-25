@@ -11,15 +11,17 @@ export default async function AppLayout({
 }) {
   const user = await requireUser()
 
-  // Admin-only sections. This hides the links; the database is what actually
-  // refuses the data, so a hand-typed URL gets an empty page, not a leak.
+  // Every section is reachable by everyone. The admin-only material lives
+  // inside these pages — storage tier gauges, firewall rules, spend — and the
+  // database is what withholds it, so a standard user sees a thinner page
+  // rather than a forbidden one.
   const links = [
-    { href: '/', label: 'Overview', admin: false },
-    { href: '/compute', label: 'Compute', admin: false },
-    { href: '/storage', label: 'Storage & DR', admin: true },
-    { href: '/network', label: 'Networking', admin: true },
-    { href: '/insights', label: 'Insights', admin: false },
-  ].filter((l) => !l.admin || user.role === 'admin')
+    { href: '/', label: 'Overview' },
+    { href: '/compute', label: 'Compute' },
+    { href: '/storage', label: 'Storage & DR' },
+    { href: '/network', label: 'Networking' },
+    { href: '/insights', label: 'Insights' },
+  ]
 
   return (
     <div className="shell">
