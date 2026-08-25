@@ -1,0 +1,368 @@
+/* Insights — Track D.
+   Everything here is scoped to this route. Shared classes (.panel, .card,
+   .cards, .badge, .meter, .muted, .small) come from app/globals.css and are
+   used as-is; nothing below redefines them. Every colour is a theme variable,
+   so the charts stay legible in light and dark. */
+
+/* ---------- section heading with a control on the right ---------- */
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.sectionHead h2 {
+  margin: 0;
+  font-size: 15px;
+}
+.sectionHead p {
+  margin: 3px 0 0;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.pickerLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.picker {
+  font: inherit;
+  font-size: 14px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--text);
+}
+.picker:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ---------- live indicator ---------- */
+
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  animation: pulse 2s ease-in-out infinite;
+}
+.liveDot.idle {
+  background: var(--muted);
+  animation: none;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .liveDot {
+    animation: none;
+  }
+}
+
+/* ---------- charts ---------- */
+
+.chartGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.chart {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 14px 8px;
+  background: var(--bg);
+}
+
+.chartHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.chartLabel {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.chartValue {
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.chartSvg {
+  display: block;
+  width: 100%;
+  height: 84px;
+  overflow: visible;
+}
+.chartFoot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+  padding-top: 4px;
+}
+
+.grid {
+  stroke: var(--border);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.area {
+  fill: currentColor;
+  opacity: 0.13;
+  stroke: none;
+}
+
+/* Series colours, driven entirely by the theme variables. */
+.cpu {
+  color: var(--accent);
+}
+.ram {
+  color: var(--ok);
+}
+.iops {
+  color: var(--warn);
+}
+.latency {
+  color: var(--hot);
+}
+.flat {
+  color: var(--muted);
+}
+
+/* ---------- tables ---------- */
+
+.subhead {
+  margin: 20px 0 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.table th,
+.table td {
+  text-align: left;
+  padding: 9px 12px 9px 0;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.table th {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.table tfoot td {
+  border-bottom: 0;
+  border-top: 1px solid var(--border);
+  font-weight: 600;
+}
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- fleet rows ---------- */
+
+.fleetRow {
+  cursor: pointer;
+}
+.fleetRow:hover td {
+  background: var(--bg);
+}
+.fleetRow.selected td {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.fleetName {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+.fleetRow.selected .fleetName {
+  font-weight: 600;
+}
+.spark {
+  display: block;
+  width: 120px;
+  height: 26px;
+}
+.sparkCell {
+  width: 130px;
+  padding-right: 0;
+}
+
+/* ---------- badges (content area; the globals variants are tuned for the
+   dark sidebar and read poorly on a white panel) ---------- */
+
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+}
+.pillRunning {
+  background: color-mix(in srgb, var(--ok) 15%, transparent);
+  color: var(--ok);
+  border-color: color-mix(in srgb, var(--ok) 35%, transparent);
+}
+.pillIdle {
+  background: color-mix(in srgb, var(--muted) 15%, transparent);
+  color: var(--muted);
+  border-color: color-mix(in srgb, var(--muted) 30%, transparent);
+}
+.pillBusy {
+  background: color-mix(in srgb, var(--warn) 15%, transparent);
+  color: var(--warn);
+  border-color: color-mix(in srgb, var(--warn) 35%, transparent);
+}
+.pillGlobal {
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+/* ---------- catalogs ---------- */
+
+.shelves {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.assetList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.asset {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.asset:last-child {
+  border-bottom: 0;
+}
+.assetName {
+  font-weight: 500;
+  word-break: break-word;
+}
+.assetMeta {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.assetSize {
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- billing report link ---------- */
+
+.download {
+  display: inline-block;
+  font: inherit;
+  font-size: 14px;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+}
+.download:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.download:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.rates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.note {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}

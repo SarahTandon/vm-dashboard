@@ -1,0 +1,448 @@
+/*
+ * Networking page styles.
+ *
+ * Everything is scoped under `.net`, which does two jobs: it keeps these rules
+ * out of the other tracks' way, and it gives them enough specificity to undo
+ * the page-wide `input`, `label`, and `button[type='submit']` rules in
+ * globals.css, which are written for the login form rather than for dense
+ * tables. Colours come only from the shared custom properties, so light and
+ * dark both follow the theme.
+ */
+
+.net {
+  display: block;
+}
+
+/* ---------- form controls, made table-sized ---------- */
+
+.net label {
+  display: block;
+  margin-top: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.net input,
+.net select {
+  font: inherit;
+  font-size: 13px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.net input[type='checkbox'] {
+  width: auto;
+  accent-color: var(--accent);
+}
+
+.net button,
+.net button[type='submit'] {
+  font: inherit;
+  font-size: 13px;
+  margin-top: 0;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.net button:hover:not(:disabled),
+.net button[type='submit']:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.net button:disabled,
+.net button[type='submit']:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.net .primary,
+.net button[type='submit'].primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.net .primary:hover:not(:disabled),
+.net button[type='submit'].primary:hover:not(:disabled) {
+  color: #fff;
+  opacity: 0.9;
+}
+
+.net .danger,
+.net button[type='submit'].danger {
+  color: var(--hot);
+}
+
+.net .danger:hover:not(:disabled),
+.net button[type='submit'].danger:hover:not(:disabled) {
+  border-color: var(--hot);
+  color: var(--hot);
+}
+
+/* `.badge` is a global class from globals.css, so it must not be hashed here.
+   The margin-top it carries is for the sidebar; inline it in a row instead. */
+.net :global(.badge) {
+  margin-top: 0;
+}
+
+/* ---------- panel headers with a control on the right ---------- */
+
+.panelHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+/* Beats the `.panel h2` rule in globals.css, which assumes the heading is the
+   only thing in the panel header. */
+.net .panelHead h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.net .panelHead p {
+  margin: 3px 0 0;
+}
+
+/* ---------- the overlapping-range note ---------- */
+
+.note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.note p {
+  margin: 0;
+}
+
+.note p + p {
+  margin-top: 5px;
+}
+
+/* ---------- subnet topology ---------- */
+
+.subnets {
+  display: grid;
+  gap: 12px;
+}
+
+.subnet {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 15px;
+  background: var(--bg);
+}
+
+.subnetHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.subnetName {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mono {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cidr {
+  padding: 1px 7px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+}
+
+.kind {
+  border: 1px solid transparent;
+}
+
+.kindRouted {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent);
+}
+
+.kindIsolated {
+  background: color-mix(in srgb, var(--warn) 18%, transparent);
+  color: var(--warn);
+}
+
+.kindGroup {
+  background: color-mix(in srgb, var(--ok) 16%, transparent);
+  color: var(--ok);
+}
+
+.overlapFlag {
+  background: transparent;
+  border: 1px dashed var(--border);
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.subnetMeta {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+
+.members {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+
+.memberList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 7px;
+}
+
+.member {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  font-size: 12.5px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex: none;
+}
+
+.dotRunning {
+  background: var(--ok);
+}
+
+.dotStopped {
+  background: var(--muted);
+}
+
+.dotBusy {
+  background: var(--warn);
+}
+
+.empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ---------- tables ---------- */
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.table th,
+.table td {
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.table thead th {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  background: var(--bg);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table tbody tr.off td:not(.keep) {
+  opacity: 0.5;
+}
+
+/* A disabled rule dims, but the controls that bring it back must not. */
+.keep {
+  opacity: 1;
+}
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+.actionsCell {
+  width: 1%;
+}
+
+.rowButtons {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.inlineForm {
+  display: inline;
+}
+
+.pill {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pillAllow {
+  background: color-mix(in srgb, var(--ok) 16%, transparent);
+  color: var(--ok);
+}
+
+.pillDeny {
+  background: color-mix(in srgb, var(--hot) 15%, transparent);
+  color: var(--hot);
+}
+
+.pillNeutral {
+  background: color-mix(in srgb, var(--muted) 16%, transparent);
+  color: var(--muted);
+}
+
+.toggle {
+  min-width: 78px;
+}
+
+.toggleOn {
+  color: var(--ok);
+  border-color: color-mix(in srgb, var(--ok) 45%, var(--border));
+}
+
+.toggleOff {
+  color: var(--muted);
+}
+
+.errorRow td {
+  white-space: normal;
+  background: color-mix(in srgb, var(--hot) 8%, transparent);
+}
+
+.rowError {
+  margin: 0;
+  color: var(--hot);
+  font-size: 12.5px;
+}
+
+/* ---------- editor ---------- */
+
+.editor {
+  margin-top: 14px;
+  padding: 14px 15px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.editorTitle {
+  margin: 0 0 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.checkField {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  align-self: end;
+  padding-bottom: 6px;
+}
+
+.checkField label {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+.editorButtons {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.formError {
+  margin: 12px 0 0;
+  padding: 9px 11px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--hot) 12%, transparent);
+  color: var(--hot);
+  font-size: 13px;
+}
+
+/* ---------- restricted notice ---------- */
+
+.restricted {
+  display: grid;
+  gap: 6px;
+}
